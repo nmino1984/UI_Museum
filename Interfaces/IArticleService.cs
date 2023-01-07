@@ -6,6 +6,7 @@ namespace UI_Museum.Interfaces
     {
         Task<List<ArticleResponseViewModel>> ListAllArticles();
         Task<ArticleResponseViewModel> GetArticleById(int articleId);
+        Task<List<MuseumSelectResponseViewModel>> GetListSelectMuseums();
         Task<bool> RegisterArticle(ArticleRequestViewModel article);
         Task<bool> EditArticle(int articleId, ArticleRequestViewModel article);
         Task<bool> DeleteArticle(int articleId);

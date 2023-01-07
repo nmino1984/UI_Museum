@@ -1,0 +1,53 @@
+﻿@using Utiles;
+@model UI_Museum.Models.MuseumResponseViewModel
+
+@{
+    ViewData["Title"] = "Museum";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>@ViewBag.Subtitle</h1>
+<hr />
+
+<h4>@ViewBag.Action</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Save" asp-controller="Museum" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <input asp-for="Id" type="hidden" class="form-control" />
+            <input asp-for="ThemeId" type="hidden" class="form-control" />
+
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Theme" class="control-label"></label>
+                <select asp-for="Theme" class="form-control" asp-items="Html.GetEnumSelectList<Themes>()">
+                    <option selected="selected" value="Theme">Please select</option>
+                </select>
+                <span asp-validation-for="Theme" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreatedAt" class="control-label"></label>
+                <input asp-for="CreatedAt" class="form-control" />
+                <span asp-validation-for="CreatedAt" class="text-danger"></span>
+            </div>
+            @*<div class="form-group">
+                <label asp-for="UpdatedAt" class="control-label"></label>
+                <input asp-for="UpdatedAt" class="form-control" />
+                <span asp-validation-for="UpdatedAt" class="text-danger"></span>
+            </div>*@
+            <hr />
+            <div class="form-group">
+                <button type="submit" class="btn btn-success btn-sm">Saves changes</button>
+
+                <a asp-action="Index" asp-controller="Museum" class="btn btn-warning btn-sm">Back to Museums list</a>  
+            </div>
+        </form>
+    </div>
+</div>
+

@@ -1,0 +1,97 @@
+﻿@using Utiles;
+@model List<MuseumResponseViewModel>;
+@{
+    ViewData["Title"] = "MuseumsByTheme";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script>
+    function getTheme() {
+            var theme = document.getElementById("themes").value;
+        alert(theme);
+    }
+
+    function onChangeTheme(){
+        var theme = document.getElementById("themes").value;
+        window.location.href = '@Url.Action("MuseumsByTheme", "Museum")?theme=' + theme;
+    }
+</script>
+
+<h1>@ViewBag.NewTitle</h1>
+<hr />
+
+<h4>@ViewBag.Action</h4>
+<hr />
+
+<div class="row">
+    <div class="mb-2">
+        <label class="form-label"><b>Select Theme:</b></label>
+    </div>
+    <div class="mb-10">
+        @Html.DropDownList("themes", (List<SelectListItem>)ViewBag.ListadoThemes, "---Select a Theme---", new { onchange="onChangeTheme()", style="width: 200px; height: 40px;"})
+    </div>
+</div>
+<hr />
+
+<a asp-action="Index" asp-controller="Museum" class="btn btn-warning btn-sm">Back to List of All Museums</a>  
+
+@foreach (var item in Model)
+{
+        <div class="card">
+        @{
+            string createddAt = item.CreatedAt.ToShortDateString(); ;
+            string updatedAt = "Not Updated";
+            string listArticulos = "";
+            bool hasArticles = false;
+
+            if (item.UpdatedAt != null)
+            {
+                updatedAt = item.UpdatedAt.Value.ToShortDateString();
+            }
+
+            @foreach (var article in item.listArticles!)
+            {
+                listArticulos += article.Name + ", ";
+            }
+            if (listArticulos != "")
+            {
+                hasArticles = true;
+                listArticulos = listArticulos.Substring(0, listArticulos.Length - 2) + ".";
+            }
+        }
+        <div class="card-header">
+            @item.Name
+        </div>
+        <div class="card-body">
+            <dl>
+                <dt class = "col-sm-2">
+                    <label class="control-label">Created At</label>
+                </dt>
+                <dd class = "col-sm-10">
+                    @createddAt
+                </dd>
+                <dt class = "col-sm-2">
+                    <label class="control-label">UpdatedAt</label>
+                </dt>
+                <dd class = "col-sm-10">
+                    @updatedAt
+                </dd>
+                <dt class = "col-sm-2">
+                    List of Articles
+                </dt>
+                <dd class = "col-sm-10">
+                    @if (hasArticles)
+                    {
+                        @listArticulos;
+                    }
+                    else
+                    {
+                        @:Not Articles asociated to Museum
+                    }
+                </dd>
+            </dl>
+        </div>
+    </div>
+}
+
+

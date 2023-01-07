@@ -1,0 +1,54 @@
+﻿@model ArticleResponseViewModel
+
+@{
+    ViewData["Title"] = "RelocateArticle";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>@ViewBag.Subtitle</h1>
+<hr />
+
+<div class="card">
+    <div class="card-header">
+        <h4>@ViewBag.Action</h4>
+    </div>
+    <div class="card-body">
+        <form asp-action="Save" asp-controller="Article" method="post">
+
+            <input asp-for="Id" type="hidden" />
+            <input asp-for="Name" type="hidden" />
+            <input asp-for="IsDamaged" type="hidden" />
+            <input asp-for="CreatedAt" type="hidden" />
+            <dl class="row">
+                <dt class = "col-sm-2">
+                    @Html.DisplayNameFor(model => model.Name)
+                </dt>
+                <dd class = "col-sm-10">
+                    @Html.DisplayFor(model => model.Name)
+                </dd>
+                <dt class = "col-sm-2">
+                    @Html.DisplayNameFor(model => model.IsDamaged)
+                </dt>
+                <dd class = "col-sm-10">
+                    @Html.DisplayFor(model => model.IsDamaged)
+                </dd>
+                <dt class = "col-sm-2">
+                    <label class="form-label">Museum</label>
+                </dt>
+                <dd class = "col-sm-10">
+                    <select class="form-control" asp-for="IdMuseum">
+                        @foreach (var item in ViewBag.Museum)
+                        {
+                            <option value=@item.MuseumId> @item.Name</option>
+                        }
+                    </select>
+                </dd>
+            </dl>
+
+            <button type="submit" class="btn btn-success btn-sm">Saves changes</button>
+
+            <a asp-action="Index" asp-controller="Museum" class="btn btn-warning btn-sm">Back to Museum list</a>  
+
+        </form>
+    </div>
+</div>

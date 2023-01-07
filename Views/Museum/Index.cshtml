@@ -1,0 +1,101 @@
+﻿@model List<MuseumResponseViewModel>
+<script>
+    function confirmDelete(Id, cantArticulos){
+
+        if(cantArticulos == 0){
+            var answer=confirm("¿Are you sure that you want to Delete Item?");
+                if (answer)
+                    window.location.href = '@Url.Action("Delete", "Museum")?museumId=' + Id;
+        }
+        else{
+            alert("Can't delete Museum because it has Article(s) asociated!");
+        }
+    }
+
+</script>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>@ViewBag.NewTitle</h1>
+<hr />
+
+<div class="card">
+    <div class="card-header">
+        <a asp-action="Museum" asp-controller="Museum" class="btn btn-success btn-md" style="margin-right:30px;">Add new Museum</a>
+        <a asp-action="MuseumsByTheme" asp-controller="Museum" class="btn btn-secondary btn-md">Get all Museums by Theme</a>        
+    </div>
+    <div class="card-body">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th width="20%">Name</th>
+                    <th width="5%">Theme</th>
+                    <th width="28%">List of Articles</th>
+                    <th width="12%">Created At</th>
+                    <th width="12%">Updated At</th>
+                    <th width="23%">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    string listaArticulos = "";
+                    bool hasArticles = false;
+                    string createdAt = "";
+                    string updatedAt = "Not Updated";
+
+                    @foreach (var article in item.listArticles!)
+                    {
+                        listaArticulos += article.Name + ", ";
+                    }
+                    if (listaArticulos != "")
+                    {
+                        hasArticles = true;
+                        listaArticulos = listaArticulos.Substring(0, listaArticulos.Length - 2) + ".";
+                    }
+
+                    createdAt = @item.CreatedAt.ToShortDateString();
+
+                    if (@item.UpdatedAt != null)
+                        updatedAt = @item.UpdatedAt!.Value.ToShortDateString();
+
+                    <tr>
+                        <td>@item.Name</td>
+                        <td>@item.Theme</td>
+                        <td>
+                            @*<table>*@
+                                <ul>
+                                    @{
+                                        foreach (var article in item.listArticles!)
+                                        {
+                                            <li>
+                                                <a asp-action="RelocateArticle" asp-controller="Article" asp-route-articleId="@article.Id" class="btn btn-outline-primary btn-sm">Relocate</a> @article.Name <br/>                    
+                                            </li>
+                                        }
+                                    }
+                                </ul>
+                            @*</table>*@
+                        </td>
+                        <td>@createdAt </td>
+                        <td>@updatedAt</td>
+                        <td>
+                            <a asp-action="Museum" asp-controller="Museum" asp-route-museumId="@item.Id" class="btn btn-primary btn-sm">Edit</a>
+                            @if (!hasArticles)
+                            {
+                                <a class="btn btn-danger btn-sm" onclick="confirmDelete(@item.Id, 0)">Delete</a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-outline-danger btn-sm" onclick="confirmDelete(@item.Id, @item.listArticles.Count)">Delete</a>
+                            }
+                            <a asp-action="Details" asp-controller="Museum" asp-route-museumId="@item.Id" class="btn btn-outline-success btn-sm">Details</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+

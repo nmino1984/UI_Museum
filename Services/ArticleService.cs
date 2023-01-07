@@ -9,7 +9,7 @@ namespace UI_Museum.Services
 {
     public class ArticleService : IArticleService
     { 
-        private static string _baseUrl;
+        private static string _baseUrl = "";
 
         public ArticleService()
         {
@@ -57,6 +57,26 @@ namespace UI_Museum.Services
             }
 
             return article!;
+        }
+
+        public async Task<List<MuseumSelectResponseViewModel>> GetListSelectMuseums()
+        {
+            var museums = new List<MuseumSelectResponseViewModel>();
+
+            var client = new HttpClient();
+            client.BaseAddress = new Uri(_baseUrl);
+
+            var response = await client.GetAsync("api/Museum/Select");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var json_response = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<BaseResponse<IEnumerable<MuseumSelectResponseViewModel>>>(json_response);
+
+                museums = result!.Data!.ToList();
+            }
+
+            return museums!;
         }
 
         public async Task<bool> RegisterArticle(ArticleRequestViewModel article)

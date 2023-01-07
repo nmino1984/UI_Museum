@@ -1,0 +1,76 @@
+﻿
+@{
+    ViewData["Title"] = "Solution";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Solution</h1>
+</div>
+<div>
+    <h3>
+        Two Solutions sent. Backend (Museums) and Frontend (UI_Museums)
+    </h3>
+    <p style="color:darkgrey;">Both are programing using Microsoft stack technologies. </p>
+    <p>Backend has 4 (four) Class Libraries and 1 (one) ASP.NET Core Web API</p>
+    <p>Frontend is an ASP.NET Core Web Application (Model-View-Controller</p>
+    <br />
+
+    <h4>
+        BACKEND
+    </h4>
+    <hr />
+    <p>Devided in Two Controllers, (for Museum object and for Article object).</p>
+    <u>MuseumControlles</u>
+    <ul>
+        <li>ListAllMuseums: Return All Museums from Database</li>
+        <li>ListSelectMuseums: Return the Id and Name of all Museums in Database</li>
+        <li>GetMuseumById: Return an Articles from Database, given its Identificator</li>
+        <li>ListArticlesByMuseum: Return All Articles from Database, given a Museum Identificator</li>
+        <li>GetMuseumsByTheme: Returns All Museums of a Theme given</li>
+        <li>RegisterMuseum: Save a Museum in Database</li>
+        <li>EditMuseum: Modified and Museum, given its Identificator</li>
+        <li>DeleteMuseum: Deletes permanently a Museum from Database</li>
+        <li>RemoveMuseum: "Updates"" a Museum in Database, filling the field Deleted At</li>
+    </ul>
+    <u>ArticleControlles</u>
+    <ul>
+        <li>ListAllArticles: Return All Articles from Database</li>
+        <li>GetArticleById: Return an Articles from Database, given its Identificator</li>
+        <li>RegisterArticle: Save an Article in Database</li>
+        <li>EditArticle: Modified and Article, given its Identificator</li>
+        <li>DeleteArticle: Deletes permanently an Article from Database</li>
+        <li>RemoveArticle: "Updates"" an Article in Database, filling the field Deleted At</li>
+    </ul>
+    <br />
+    <h4>
+        FRONTEND 
+    </h4>
+    <hr />
+    <p>Devided in Three Controllers, (Home, Museum and Article Controller).</p>
+    <u>HomeControlles</u>
+    <p>For Pages of Index, Solution and Privacy</p>
+    <br />
+    <u>MuseumControlles</u>
+    <p>Pages for Manage Museums</p>
+    <ul>
+        <li>List of All Articles</li>
+        <li>Create or Edit an Article</li>
+        <li>Mark an Article as Damaged</li>
+        <li>Delete an Article</li>
+        <li style="color: blue;">Relocate an Article from a Museum (optional)</li>
+    </ul>
+    
+    <br />
+    <u>ArticleControlles</u>
+    <p>For Pages of Index, Solution and Privacy</p>
+    <ul>
+        <li>List of All Museums</li>
+        <li>Create or Edit a Museum</li>
+        <li>Show Details of a Museum</li>
+        <li>Get all Museums by Theme</li>
+        <li>Delete a Museum</li>
+        <li style="color:red;">Create Several Articles at once. (optional, Not Finished)</li>
+    </ul>
+    <br />
+</div>
+

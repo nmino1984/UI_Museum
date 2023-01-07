@@ -1,0 +1,90 @@
+﻿@model MuseumResponseViewModel
+
+@{
+    ViewData["Title"] = "ManageArticles";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>@ViewBag.Subtitle</h1>
+<hr />
+
+<div>
+    <h4>@ViewBag.Action</h4>
+    <hr />
+
+    @{
+        string createddAt = Model.CreatedAt.ToShortDateString(); ;
+        string updatedAt = "Not Updated";
+        string listArticulos = "";
+        bool hasArticles = false;
+
+        if (Model.UpdatedAt != null)
+        {
+            updatedAt = Model.UpdatedAt.Value.ToShortDateString();
+        }
+
+        @foreach (var article in Model.listArticles!)
+        {
+            listArticulos += article.Name + ", ";
+        }
+        if (listArticulos != "")
+        {
+            hasArticles = true;
+            listArticulos = listArticulos.Substring(0, listArticulos.Length - 2) + ".";
+        }
+    }
+
+    <input asp-for="Id" type="hidden" class="form-control" />
+    <input asp-for="ThemeId" type="hidden" class="form-control" />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Theme)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Theme)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CreatedAt)
+        </dt>
+        <dd class = "col-sm-10">
+            @createddAt
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.UpdatedAt)
+        </dt>
+        <dd class = "col-sm-10">
+            @updatedAt
+        </dd>
+        <dt class = "col-sm-2">
+            List of Articles
+        </dt>
+        <dd class = "col-sm-10">
+            @if (hasArticles)
+            {
+                <ul>
+                    @{
+                        foreach (var article in Model.listArticles!)
+                        {
+                            <li>
+                                <a asp-action="RelocateArticle" asp-controller="Article" asp-route-articleId="@article.Id" class="btn btn-outline-primary btn-sm">Relocate</a> @article.Name <br/>                    
+                            </li>
+                        }
+                    }
+                </ul>
+            }
+            else
+            {
+                @:Not Articles asociated to Museum
+            }
+        </dd>
+    </dl>
+    <div class="form-group">
+        <a asp-action="Index" asp-controller="Museum" class="btn btn-warning btn-sm">Back to Museums list</a>  
+    </div>
+</div>

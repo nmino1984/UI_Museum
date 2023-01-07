@@ -7,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IArticleService, ArticleService>();
+builder.Services.AddScoped<IMuseumService, MuseumService>();
 
 var app = builder.Build();
 

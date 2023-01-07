@@ -1,0 +1,75 @@
+﻿ @model ArticleResponseViewModel 
+@{
+    ViewData["Title"] = "CreateSeveralArticles";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script>
+    function createArticles(){
+
+        var numberOfArticles = document.getElementById("numberOfArticle").value;
+
+        if(numberOfArticles != 0){
+            window.location.href = '@Url.Action("CreateSeveralArticles", "Article")?numberOfArticles=' + numberOfArticles;
+        }
+        else{
+            alert("Number of Articles to Create should be greater than 0!!!");
+        }
+    }
+
+</script>
+
+<h1>@ViewBag.Subtitle</h1>
+<hr />
+
+<h4>@ViewBag.Action</h4>
+<hr />
+
+<div class="row">
+    <div class="mb-2">
+        <input type="text" id="numberOfArticle" class="form-control form-control-sm" placeholder="---Number of Articles to Create at once---" />
+    </div>
+    <div class="mb-10">
+        <a class="btn btn-outline-danger btn-sm" onclick="createArticles()">Create Articles</a>
+    </div>
+</div>
+<hr />
+
+@{
+    int numberOfArticles = ViewBag.NumberOfArticles;
+    if (numberOfArticles != 0)
+    {
+        @:<form id="formArticles" method="post">
+            for (int i = 0; i < numberOfArticles; i++)
+            {
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Article number: @(i+1)</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-2">
+                            <label class="form-label">Name</label>
+                            <input type="text" class="form-control form-control-sm" asp-for="Name" >
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label">Is Damaged?</label>
+                            <input name="IsDamaged" type="checkbox" asp-for="IsDamaged" />
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label">Museum</label>
+                            <select class="form-control" asp-for="IdMuseum">
+                                @foreach (var item in ViewBag.Museum)
+                                {
+                                    <option value=@item.MuseumId> @item.Name</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            }
+            <a asp-action="CreateMultipleItems" asp-controller="Article" class="btn btn-warning btn-sm">Create Several Articles at Once</a>  
+        @:</form>
+    }
+}
+
+
