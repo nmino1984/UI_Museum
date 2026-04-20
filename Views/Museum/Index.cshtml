@@ -1,7 +1,6 @@
 ﻿@model List<MuseumResponseViewModel>
 <script>
     function confirmDelete(Id, cantArticulos){
-
         if(cantArticulos == 0){
             var answer=confirm("¿Are you sure that you want to Delete Item?");
                 if (answer)
@@ -10,6 +9,12 @@
         else{
             alert("Can't delete Museum because it has Article(s) asociated!");
         }
+    }
+
+    function confirmRemove(Id){
+        var answer=confirm("Soft-delete this museum? It will be hidden but kept in the database.");
+        if (answer)
+            window.location.href = '@Url.Action("Remove", "Museum")?museumId=' + Id;
     }
 
 </script>
@@ -90,6 +95,7 @@
                             {
                                 <a class="btn btn-outline-danger btn-sm" onclick="confirmDelete(@item.Id, @item.listArticles.Count)">Delete</a>
                             }
+                            <a class="btn btn-warning btn-sm" onclick="confirmRemove(@item.Id)">Remove</a>
                             <a asp-action="Details" asp-controller="Museum" asp-route-museumId="@item.Id" class="btn btn-outline-success btn-sm">Details</a>
                         </td>
                     </tr>

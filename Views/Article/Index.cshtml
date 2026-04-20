@@ -1,18 +1,22 @@
 ﻿@model List<ArticleResponseViewModel>
 <script>
     function confirmDelete(Id){
-
         var answer=confirm("¿Are you sure that you want to Delete Item?");
-           if (answer)
-             window.location.href = '@Url.Action("Delete", "Article")?articleId=' + Id;
-        }
+        if (answer)
+            window.location.href = '@Url.Action("Delete", "Article")?articleId=' + Id;
+    }
 
     function confirmMarkDamaged(Id){
-
         var answer=confirm("¿Are you sure that you want to Mark Article as Damaged?");
-           if (answer)
-             window.location.href = '@Url.Action("MarkArticleAsDamaged", "Article")?articleId=' + Id;
-        }
+        if (answer)
+            window.location.href = '@Url.Action("MarkArticleAsDamaged", "Article")?articleId=' + Id;
+    }
+
+    function confirmRemove(Id){
+        var answer=confirm("Soft-delete this article? It will be hidden but kept in the database.");
+        if (answer)
+            window.location.href = '@Url.Action("Remove", "Article")?articleId=' + Id;
+    }
 </script>
 @{
     ViewData["Title"] = "Index";
@@ -46,7 +50,7 @@
                     string createdAt = "";
                     string updatedAt = "Not Updated";
 
-                    if (item.IsDamaged)
+                    if (item.IsDamaged == true)
                     {
                         isDamaged = "Si";
                     }
@@ -66,10 +70,11 @@
                         <td>
                             <a asp-action="Article" asp-controller="Article" asp-route-articleId="@item.Id" class="btn btn-primary btn-sm">Edit</a>
                             <a class="btn btn-danger btn-sm" onclick="confirmDelete(@item.Id)">Delete</a>
-                            @if (!item.IsDamaged)
+                            @if (item.IsDamaged != true)
                             {
                                 <a class="btn btn-outline-danger btn-sm" onclick="confirmMarkDamaged(@item.Id)">Mark</a>
                             }
+                            <a class="btn btn-warning btn-sm" onclick="confirmRemove(@item.Id)">Remove</a>
                         </td>
                     </tr>
                 }

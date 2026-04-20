@@ -1,4 +1,4 @@
-﻿ @model ArticleResponseViewModel 
+@model ArticleResponseViewModel
 @{
     ViewData["Title"] = "CreateSeveralArticles";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -6,9 +6,7 @@
 
 <script>
     function createArticles(){
-
         var numberOfArticles = document.getElementById("numberOfArticle").value;
-
         if(numberOfArticles != 0){
             window.location.href = '@Url.Action("CreateSeveralArticles", "Article")?numberOfArticles=' + numberOfArticles;
         }
@@ -16,7 +14,6 @@
             alert("Number of Articles to Create should be greater than 0!!!");
         }
     }
-
 </script>
 
 <h1>@ViewBag.Subtitle</h1>
@@ -29,7 +26,7 @@
     <div class="mb-2">
         <input type="text" id="numberOfArticle" class="form-control form-control-sm" placeholder="---Number of Articles to Create at once---" />
     </div>
-    <div class="mb-10">
+    <div class="mb-2">
         <a class="btn btn-outline-danger btn-sm" onclick="createArticles()">Create Articles</a>
     </div>
 </div>
@@ -39,37 +36,35 @@
     int numberOfArticles = ViewBag.NumberOfArticles;
     if (numberOfArticles != 0)
     {
-        @:<form id="formArticles" method="post">
-            for (int i = 0; i < numberOfArticles; i++)
+        <form id="formArticles" asp-action="CreateMultipleItems" asp-controller="Article" method="post">
+            @for (int i = 0; i < numberOfArticles; i++)
             {
-                <div class="card">
+                <div class="card mb-2">
                     <div class="card-header">
-                        <h4>Article number: @(i+1)</h4>
+                        <h4>Article number: @(i + 1)</h4>
                     </div>
                     <div class="card-body">
                         <div class="mb-2">
                             <label class="form-label">Name</label>
-                            <input type="text" class="form-control form-control-sm" asp-for="Name" >
+                            <input type="text" name="[@i].Name" class="form-control form-control-sm" />
                         </div>
                         <div class="mb-2">
                             <label class="form-label">Is Damaged?</label>
-                            <input name="IsDamaged" type="checkbox" asp-for="IsDamaged" />
+                            <input name="[@i].IsDamaged" type="checkbox" value="true" />
                         </div>
                         <div class="mb-2">
                             <label class="form-label">Museum</label>
-                            <select class="form-control" asp-for="IdMuseum">
+                            <select name="[@i].IdMuseum" class="form-control">
                                 @foreach (var item in ViewBag.Museum)
                                 {
-                                    <option value=@item.MuseumId> @item.Name</option>
+                                    <option value="@item.MuseumId">@item.Name</option>
                                 }
                             </select>
                         </div>
                     </div>
                 </div>
             }
-            <a asp-action="CreateMultipleItems" asp-controller="Article" class="btn btn-warning btn-sm">Create Several Articles at Once</a>  
-        @:</form>
+            <button type="submit" class="btn btn-warning btn-sm mt-2">Create Several Articles at Once</button>
+        </form>
     }
 }
-
-
