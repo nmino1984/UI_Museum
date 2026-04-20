@@ -8,17 +8,16 @@ namespace UI_Museum.Services
 {
     /// <summary>
     /// Implements <see cref="IMuseumService"/> by calling the Museum REST API over HTTP.
-    /// The base URL is read from <c>ApiSettings:baseUrl</c> in <c>appsettings.json</c>.
+    /// Uses a named <see cref="IHttpClientFactory"/> client ("MuseumApi") whose base address
+    /// is configured once in <c>Program.cs</c> from <c>ApiSettings:baseUrl</c>.
     /// </summary>
     public class MuseumService : IMuseumService
     {
-        private static string _baseUrl = "";
+        private readonly IHttpClientFactory _httpClientFactory;
 
-        public MuseumService()
+        public MuseumService(IHttpClientFactory httpClientFactory)
         {
-            var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json").Build();
-
-            _baseUrl = builder.GetSection("ApiSettings:baseUrl").Value;
+            _httpClientFactory = httpClientFactory;
         }
 
         /// <summary>
@@ -29,9 +28,7 @@ namespace UI_Museum.Services
         {
             var listMuseums = new List<MuseumResponseViewModel>();
 
-            var client = new HttpClient();
-            client.BaseAddress = new Uri(_baseUrl);
-
+            var client = _httpClientFactory.CreateClient("MuseumApi");
             var response = await client.GetAsync("api/Museum/All");
 
             if (response.IsSuccessStatusCode)
@@ -42,7 +39,7 @@ namespace UI_Museum.Services
                 listMuseums = result!.Data!.ToList();
             }
 
-            return listMuseums.ToList();
+            return listMuseums;
         }
 
         /// <summary>
@@ -54,9 +51,7 @@ namespace UI_Museum.Services
         {
             var museum = new MuseumResponseViewModel();
 
-            var client = new HttpClient();
-            client.BaseAddress = new Uri(_baseUrl);
-
+            var client = _httpClientFactory.CreateClient("MuseumApi");
             var response = await client.GetAsync($"api/Museum/{museumId}");
 
             if (response.IsSuccessStatusCode)
@@ -79,9 +74,7 @@ namespace UI_Museum.Services
         {
             var listArticles = new List<ArticleResponseViewModel>();
 
-            var client = new HttpClient();
-            client.BaseAddress = new Uri(_baseUrl);
-
+            var client = _httpClientFactory.CreateClient("MuseumApi");
             var response = await client.GetAsync($"api/Museum/ArticlesByMuseum/{museumId}");
 
             if (response.IsSuccessStatusCode)
@@ -92,7 +85,7 @@ namespace UI_Museum.Services
                 listArticles = result!.Data!.ToList();
             }
 
-            return listArticles.ToList();
+            return listArticles;
         }
 
         /// <summary>
@@ -104,9 +97,7 @@ namespace UI_Museum.Services
         {
             var listMuseums = new List<MuseumResponseViewModel>();
 
-            var client = new HttpClient();
-            client.BaseAddress = new Uri(_baseUrl);
-
+            var client = _httpClientFactory.CreateClient("MuseumApi");
             var response = await client.GetAsync($"api/Museum/GetMuseumsByTheme/{theme}");
 
             if (response.IsSuccessStatusCode)
@@ -117,7 +108,7 @@ namespace UI_Museum.Services
                 listMuseums = result!.Data!.ToList();
             }
 
-            return listMuseums!;
+            return listMuseums;
         }
 
         /// <summary>
@@ -127,21 +118,11 @@ namespace UI_Museum.Services
         /// <returns><c>true</c> if the API returned a success status code; otherwise <c>false</c>.</returns>
         public async Task<bool> RegisterMuseum(MuseumRequestViewModel museum)
         {
-            bool answer = false;
-
-            var client = new HttpClient();
-            client.BaseAddress = new Uri(_baseUrl);
-
+            var client = _httpClientFactory.CreateClient("MuseumApi");
             var content = new StringContent(JsonConvert.SerializeObject(museum), Encoding.UTF8, "application/json");
-
             var response = await client.PostAsync("api/Museum/Register", content);
 
-            if (response.IsSuccessStatusCode)
-            {
-                answer = true;
-            }
-
-            return answer!;
+            return response.IsSuccessStatusCode;
         }
 
         /// <summary>
@@ -152,21 +133,11 @@ namespace UI_Museum.Services
         /// <returns><c>true</c> if the API returned a success status code; otherwise <c>false</c>.</returns>
         public async Task<bool> EditMuseum(int museumId, MuseumRequestViewModel museum)
         {
-            bool answer = false;
-
-            var client = new HttpClient();
-            client.BaseAddress = new Uri(_baseUrl);
-
+            var client = _httpClientFactory.CreateClient("MuseumApi");
             var content = new StringContent(JsonConvert.SerializeObject(museum), Encoding.UTF8, "application/json");
-
             var response = await client.PutAsync($"api/Museum/Edit/{museumId}", content);
 
-            if (response.IsSuccessStatusCode)
-            {
-                answer = true;
-            }
-
-            return answer!;
+            return response.IsSuccessStatusCode;
         }
 
         /// <summary>
@@ -177,19 +148,10 @@ namespace UI_Museum.Services
         /// <returns><c>true</c> if the API returned a success status code; otherwise <c>false</c>.</returns>
         public async Task<bool> DeleteMuseum(int museumId)
         {
-            bool answer = false;
-
-            var client = new HttpClient();
-            client.BaseAddress = new Uri(_baseUrl);
-
+            var client = _httpClientFactory.CreateClient("MuseumApi");
             var response = await client.DeleteAsync($"api/Museum/Delete/{museumId}");
 
-            if (response.IsSuccessStatusCode)
-            {
-                answer = true;
-            }
-
-            return answer!;
+            return response.IsSuccessStatusCode;
         }
 
         /// <summary>
@@ -200,9 +162,7 @@ namespace UI_Museum.Services
         /// <returns><c>true</c> if the API returned a success status code; otherwise <c>false</c>.</returns>
         public async Task<bool> RemoveMuseum(int museumId)
         {
-            var client = new HttpClient();
-            client.BaseAddress = new Uri(_baseUrl);
-
+            var client = _httpClientFactory.CreateClient("MuseumApi");
             var response = await client.PutAsync($"api/Museum/Remove/{museumId}", new StringContent("", Encoding.UTF8, "application/json"));
 
             return response.IsSuccessStatusCode;

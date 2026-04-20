@@ -6,6 +6,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddHttpClient("MuseumApi", client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["ApiSettings:baseUrl"]!);
+});
+
 builder.Services.AddScoped<IArticleService, ArticleService>();
 builder.Services.AddScoped<IMuseumService, MuseumService>();
 
@@ -27,4 +32,3 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
- 
